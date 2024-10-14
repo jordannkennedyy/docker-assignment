@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title= title
+  body
+    h1= message
+      ul
+        each item in items
+        li
+          // Display the video
+          video(controls, width="600")
+            source(src=`/videos/${item.filename}`, type="video/mp4")

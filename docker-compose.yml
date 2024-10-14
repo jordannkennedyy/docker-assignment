@@ -1,0 +1,57 @@
+version: '3'
+services:
+  upload-service:
+    build:
+      context: ./upload-service
+    container_name: upload-container
+    ports:
+      - "3000:3000"
+    networks:
+      - file_network
+    depends_on:
+      - db 
+
+  receive-service:
+    build:
+      context: ./receiver-service
+    container_name: receiver-container
+    ports:
+      - "4000:4000"
+    networks:
+      - file_network
+    depends_on:
+      - db
+
+  show-video-service:
+    build:
+      context: ./show-video-service
+    container_name: show-video-service
+    ports:
+      - "2000:2000"
+    networks:
+      - file_network
+    depends_on:
+    - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: filedb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+    - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - file_network
+
+networks:
+  file_network:
+    driver: bridge
+
+volumes:
+  db_data:
