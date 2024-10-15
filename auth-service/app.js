@@ -5,6 +5,7 @@ const session = require('express-session');
 
 const app = express();
 const PORT = 5000;
+const currentURL = window.location.href;
 
 // Sample users (for demonstration purposes)
 const users = [
@@ -58,9 +59,9 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
-// change to domain of service
+// change to domain of service with url / video
 app.post('/login', passport.authenticate('local', {
-  successRedirect: 'https://google.ca',
+  successRedirect: `${currentURL}/video`,
   failureRedirect: '/login',
   failureFlash: true
 }));

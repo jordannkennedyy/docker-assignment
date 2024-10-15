@@ -20,7 +20,7 @@ const pool = mysql.createPool({
   });
 
 // Display Videos in a List
-app.get('/', (req, res) => {
+app.get('/video', (req, res) => {
     const sqlQuery = 'SELECT * FROM files'; // query to get the items from the database
   
     // Query the database
