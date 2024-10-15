@@ -4,9 +4,15 @@ html
     title= title
   body
     h1= message
-      ul
+    form(action="/get-video", method="post") 
+      label(for="options") Select a video:
+      select(name="selectedOption" id="options") 
         each item in items
-        li
-          // Display the video
-          video(controls, width="600")
-            source(src=`/videos/${item.filename}`, type="video/mp4")
+          option(value=`${item.filepath}`)= item.filename
+
+
+            
+            // Display the video
+            //video(controls, width="600")
+              source(src=`/videos/${item.filename}`, type="video/mp4")
+      button(type="submit") Submit 
