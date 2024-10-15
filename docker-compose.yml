@@ -21,6 +21,15 @@ services:
       - file_network
     depends_on:
       - db
+  
+  passport-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    ports: 
+      - "5000:5000"
+    networks:
+      - file_network
 
   show-video-service:
     build:
