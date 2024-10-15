@@ -1,10 +1,15 @@
 const express = require('express');
 const mysql = require('mysql2');
 const AWS = require('aws-sdk');
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+
 const app = express();
 
 app.set('view engine', 'pug');
-
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // create MySQL connection
 const pool = mysql.createPool({
@@ -23,6 +28,7 @@ app.get('/', (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
+
   
       // Convert database results into an array of item names (or other fields you need)
       const items = results.map(item => ({
@@ -40,9 +46,52 @@ app.get('/', (req, res) => {
     });
   });
 
+
+
+
+
+
+
+  // app.post('/get-video', async (req, res) => {
+  //   const selectedFilePath = req.body.selectedOption; // Filepath from the form
+  //   console.log(req.body.selectedOption)
+  //   try {
+  //     // Request the video from the receiver service
+  //     const response = await axios({
+  //       method: 'get',
+  //       url: `http://receiver-container:4000/stream-video`,
+  //       params: {
+  //         filepath: selectedFilePath
+  //       },
+  //       responseType: 'stream'
+  //     });
   
+  //     // Set headers for video streaming
+  //     res.setHeader('Content-Type', 'video/mp4');
+  
+  //     // Pipe the video stream from the receiver service to the client
+  //     response.data.pipe(res);
+      
+  //   } catch (error) {
+  //     console.error('Error fetching video:', error);
+  //     res.status(500).send('Error retrieving video file');
+  //   }
+  // });
+
+
+  app.post('/get-video', (req, res) => {
+    const selectedFilePath = req.body.selectedOption; // Filepath from the form
+    
+    // Construct the URL for the video file on the receiver service
+    const videoUrl = `http://localhost:4000/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
+    
+    // Redirect the client to the video URL
+    res.redirect(videoUrl);
+  });
+
+
 
 const port = 2000;
 app.listen(port, () => {
-    console.log('Server running on http://localhost:3000');
+    console.log('Server running on http://localhost:2000');
 });
