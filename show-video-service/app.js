@@ -19,6 +19,11 @@ const pool = mysql.createPool({
     database: 'filedb'
   });
 
+app.get('/', (req, res) => {
+
+  res.redirect(`http://localhost:5000/login`);
+});
+
 // Display Videos in a List
 app.get('/video', (req, res) => {
     const sqlQuery = 'SELECT * FROM files'; // query to get the items from the database

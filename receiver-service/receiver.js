@@ -17,6 +17,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// redirect to auth
+// app.get('/', (req, res) => {
+//   res.redirect('http://localhost:5000/login');
+// });
+
+// stream-video was original
 app.get('/stream-video', (req, res) => {
   const filepath = req.query.filepath;
 

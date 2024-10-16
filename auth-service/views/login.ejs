@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
 </head>
 <body>
-  <h1>Login</h1>
-  <form action="/login" method="POST">
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" required>
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" required>
-    </div>
-    <div>
-      <button type="submit">Log In</button>
-    </div>
-  </form>
+    <h1>Login</h1>
+    <form action="/login/2000" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Login to localhost:2000</button>
+    </form>
+
+    <form action="/login/3000" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Login to localhost:3000</button>
+    </form>
 </body>
 </html>
+

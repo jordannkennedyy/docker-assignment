@@ -6,10 +6,10 @@ COPY . .
 
 RUN npm install
 RUN npm install express
-RUN npm passport 
+RUN npm install passport 
 RUN npm install passport-local
-RUN npm express-session
-RUN npm body-parser
+RUN npm install express-session
+RUN npm install body-parser
 
 EXPOSE 5000
 
