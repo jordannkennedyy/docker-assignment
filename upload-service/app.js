@@ -23,7 +23,6 @@ app.get("/video", function (req, res) {
   return res.render("upload");
 });
 
-// original = upload
 app.post("/upload", upload.single("file"), async function (req, res) {
   console.log("File received by upload service:", req.file);
 

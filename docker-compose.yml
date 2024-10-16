@@ -19,6 +19,8 @@ services:
       - "4000:4000"
     networks:
       - file_network
+    volumes:
+      - receiver_videos:~/app/uploads
     depends_on:
       - db
   
@@ -64,3 +66,4 @@ networks:
 
 volumes:
   db_data:
+  receiver_videos:
