@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
   res.redirect('http://localhost:5000/login');
 });
 
-app.get("/video", function (req, res) {
+app.get("/upload", function (req, res) {
   return res.render("upload");
 });
 

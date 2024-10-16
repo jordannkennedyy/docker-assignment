@@ -50,7 +50,7 @@ app.post('/login/3000', (req, res) => {
   if (username === user.username && password === user.password) {
     req.session.loggedIn = true;
     req.session.username = username;
-    return res.redirect('http://localhost:3000/video'); // Redirect to localhost:3000
+    return res.redirect('http://localhost:3000/upload'); // Redirect to localhost:3000
   }
   res.send('Invalid username or password for port 3000. <a href="/login">Try again</a>');
 });
