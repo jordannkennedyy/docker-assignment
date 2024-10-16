@@ -20,7 +20,7 @@ services:
     networks:
       - file_network
     volumes:
-      - receiver_videos:~/app/uploads
+      - receiver_videos:/app/uploads
     depends_on:
       - db
   
