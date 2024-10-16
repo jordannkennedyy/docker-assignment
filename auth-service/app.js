@@ -1,78 +1,72 @@
 const express = require('express');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 5000;
-const currentURL = window.location.href;
 
-// Sample users (for demonstration purposes)
-const users = [
-  {
-    id: 1,
-    username: 'testuser',
-    password: 'password123' // unhashed password for testing
-  }
-];
+// Sample user (for demonstration purposes)
+const user = {
+  username: 'testuser',
+  password: 'password123', // Unhashed password for testing
+};
 
 // Middleware
 app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'secret', // replace with a strong secret
+  secret: 'secret', // Replace with a strong secret
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true,
 }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Passport Local Strategy
-passport.use(new LocalStrategy(
-  (username, password, done) => {
-    const user = users.find(u => u.username === username);
-    if (!user) return done(null, false, { message: 'Incorrect username.' });
-
-    // Compare entered password with stored unhashed password
-    if (user.password !== password) return done(null, false, { message: 'Incorrect password.' });
-
-    return done(null, user);
-  }
-));
-
-// Serialize and Deserialize User
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  const user = users.find(u => u.id === id);
-  done(null, user);
-});
 
 // Routes
 app.get('/', (req, res) => {
-  res.render('index', { user: req.user });
+  if (req.session.loggedIn) {
+    res.render('welcome', { username: req.session.username });
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.get('/login', (req, res) => {
   res.render('login');
 });
 
-// change to domain of service with url / video
-app.post('/login', passport.authenticate('local', {
-  successRedirect: `${currentURL}/video`,
-  failureRedirect: '/login',
-  failureFlash: true
-}));
+// Handle login to localhost:2000
+app.post('/login/2000', (req, res) => {
+  const { username, password } = req.body;
+  if (username === user.username && password === user.password) {
+    req.session.loggedIn = true;
+    req.session.username = username;
+    return res.redirect('http://localhost:2000/video'); // Redirect to localhost:2000
+  }
+  res.send('Invalid username or password for port 2000. <a href="/login">Try again</a>');
+});
+
+// Handle login to localhost:3000
+app.post('/login/3000', (req, res) => {
+  const { username, password } = req.body;
+  if (username === user.username && password === user.password) {
+    req.session.loggedIn = true;
+    req.session.username = username;
+    return res.redirect('http://localhost:3000/video'); // Redirect to localhost:3000
+  }
+  res.send('Invalid username or password for port 3000. <a href="/login">Try again</a>');
+});
 
 app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
+  req.session.destroy((err) => {
+    if (err) {
+      return res.send('Error logging out. Please try again.');
+    }
+    res.redirect('/login');
+  });
 });
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
 

@@ -15,10 +15,15 @@ app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 
-app.get("/", function (req, res) {
+app.get('/', (req, res) => {
+  res.redirect('http://localhost:5000/login');
+});
+
+app.get("/video", function (req, res) {
   return res.render("upload");
 });
 
+// original = upload
 app.post("/upload", upload.single("file"), async function (req, res) {
   console.log("File received by upload service:", req.file);
 
