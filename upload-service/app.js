@@ -16,7 +16,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 app.get('/', (req, res) => {
-  res.redirect('http://localhost:5000/login');
+  res.redirect('http://auth-service:5000/login');
 });
 
 app.get("/upload", function (req, res) {
@@ -37,7 +37,7 @@ app.post("/upload", upload.single("file"), async function (req, res) {
     const form = new FormData();
     form.append("file", fs.createReadStream(req.file.path), req.file.originalname); // Use original name
 
-    const response = await axios.post("http://receiver-container:4000/receive", form, {
+    const response = await axios.post("http://receiver-service:4000/receive", form, {
       headers: {
         ...form.getHeaders(), // Set correct headers for multipart/form-data
       },

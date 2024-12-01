@@ -21,7 +21,7 @@ const pool = mysql.createPool({
 
 app.get('/', (req, res) => {
 
-  res.redirect(`http://localhost:5000/login`);
+  res.redirect(`http://auth-service:5000/login`);
 });
 
 // Display Videos in a List
@@ -88,7 +88,7 @@ app.get('/video', (req, res) => {
     const selectedFilePath = req.body.selectedOption; // Filepath from the form
     
     // Construct the URL for the video file on the receiver service
-    const videoUrl = `http://localhost:4000/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
+    const videoUrl = `http://receiver-service:4000/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
     
     // Redirect the client to the video URL
     res.redirect(videoUrl);
@@ -98,5 +98,5 @@ app.get('/video', (req, res) => {
 
 const port = 2000;
 app.listen(port, () => {
-    console.log('Server running on http://localhost:2000');
+    console.log('Server running on http://show-video-service:2000');
 });

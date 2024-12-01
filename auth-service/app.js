@@ -39,7 +39,7 @@ app.post('/login/2000', (req, res) => {
   if (username === user.username && password === user.password) {
     req.session.loggedIn = true;
     req.session.username = username;
-    return res.redirect('http://localhost:2000/video'); // Redirect to localhost:2000
+    return res.redirect('http://show-video-service:2000/video'); // Redirect to localhost:2000
   }
   res.send('Invalid username or password for port 2000. <a href="/login">Try again</a>');
 });
@@ -50,7 +50,7 @@ app.post('/login/3000', (req, res) => {
   if (username === user.username && password === user.password) {
     req.session.loggedIn = true;
     req.session.username = username;
-    return res.redirect('http://localhost:3000/upload'); // Redirect to localhost:3000
+    return res.redirect('http://upload-service:3000/upload'); // Redirect to localhost:3000
   }
   res.send('Invalid username or password for port 3000. <a href="/login">Try again</a>');
 });
@@ -66,7 +66,7 @@ app.get('/logout', (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://auth-service:${PORT}`);
 });
 
 
