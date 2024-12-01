@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-service-container
+        image: <uplaod new auth-service to dockerhub.io>
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: auth-service-lb 
+spec:
+  type: LoadBalancer
+  selector:
+    app: auth-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: receiver-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: receiver-service
+  template:
+    metadata:
+      labels:
+        app: receiver-service
+    spec:
+      containers:
+      - name: receiver-service-container
+        image: <uplaod new receiver-service to dockerhub.io>
+        ports:
+        - containerport: 4000
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: receiver-service-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: receiver-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 4000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: show-video-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: show-video-service
+  template:
+    metadata:
+      labels:
+        app: show-video-service
+    spec:
+      containers:
+      - name: show-video-service-container
+        image: <uplaod new show-video-service to dockerhub.io>
+        ports:
+        - containerPort: 2000
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: show-video-service-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: show-video-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 2000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: upload-service
+  template:
+    metadata:
+      labels:
+        app: upload-service
+    spec:
+      containers:
+      - name: upload-service-container
+        image: <uplaod new upload-service to dockerhub.io>
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: upload-service-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: upload-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database-container
+        image: <uplaod new database image to dockerhub.io>
+        ports:
+        - containerPort: 3306
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: database-lb 
+spec:
+  type: NodePort
+  selector:
+    app: database
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+    NodePort: 31000
