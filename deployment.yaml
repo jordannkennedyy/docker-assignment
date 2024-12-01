@@ -23,7 +23,7 @@ spec:
           limits:
             cpu: 500m
 ---
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: auth-service-lb 
@@ -61,7 +61,7 @@ spec:
           limits:
             cpu: 500m
 ---
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: receiver-service-lb
@@ -99,7 +99,7 @@ spec:
           limits:
             cpu: 500m
 ---
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: show-video-service-lb
@@ -137,7 +137,7 @@ spec:
           limits:
             cpu: 500m
 ---
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: upload-service-lb
@@ -186,7 +186,7 @@ spec:
           persistentVolumeClaim:
             claimName: db-pvc
 ---
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: database-lb 
