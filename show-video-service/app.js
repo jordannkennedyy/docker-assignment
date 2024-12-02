@@ -6,6 +6,9 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+const authService = 'auth-service'
+const receiverService = 'receiver-service'
+const dns = require('dns');
 
 app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +24,16 @@ const pool = mysql.createPool({
 
 app.get('/', (req, res) => {
 
-  res.redirect(`http://auth-service:5000/login`);
+  dns.lookup(authService + '.default.svc.cluster.local', (err, address, family) => {
+    if (err) {
+      return res.status(500).send('Failed to resolve service IP');
+    }
+
+    const URL = `http://${address}:5000/video`;
+    return res.redirect(URL); // Redirect to resolved service URL
+  });
+
+  //res.redirect(`http://auth-service:5000/login`);
 });
 
 // Display Videos in a List
@@ -86,12 +98,16 @@ app.get('/video', (req, res) => {
 
   app.post('/get-video', (req, res) => {
     const selectedFilePath = req.body.selectedOption; // Filepath from the form
-    
-    // Construct the URL for the video file on the receiver service
-    const videoUrl = `http://receiver-service:4000/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
-    
-    // Redirect the client to the video URL
-    res.redirect(videoUrl);
+
+    dns.lookup(receiverService + '.default.svc.cluster.local', (err, address, family) => {
+      if (err) {
+        return res.status(500).send('Failed to resolve service IP');
+      }
+      // Construct the URL for the video file on the receiver service
+      const videoUrl = `http://${address}:4000/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
+      // Redirect the client to the video URL
+      res.redirect(videoUrl);
+    });
   });
 
 

@@ -5,6 +5,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 5000;
 
+const dns = require('dns');
+const videoServiceName = 'show-video-service';
+const uploadService = 'upload-service'
+
 // Sample user (for demonstration purposes)
 const user = {
   username: 'testuser',
@@ -36,13 +40,24 @@ app.get('/login', (req, res) => {
 // Handle login to localhost:2000
 app.post('/login/2000', (req, res) => {
   const { username, password } = req.body;
+
   if (username === user.username && password === user.password) {
     req.session.loggedIn = true;
     req.session.username = username;
-    return res.redirect('http://show-video-service:2000/video'); // Redirect to localhost:2000
+
+    dns.lookup(videoServiceName + '.default.svc.cluster.local', (err, address, family) => {
+      if (err) {
+        return res.status(500).send('Failed to resolve service IP');
+      }
+
+      const URL = `http://${address}:4000/video`;
+      return res.redirect(URL); // Redirect to resolved service URL
+    });
+  } else {
+    return res.send('Invalid username or password for port 2000. <a href="/login">Try again</a>');
   }
-  res.send('Invalid username or password for port 2000. <a href="/login">Try again</a>');
 });
+
 
 // Handle login to localhost:3000
 app.post('/login/3000', (req, res) => {
@@ -50,9 +65,18 @@ app.post('/login/3000', (req, res) => {
   if (username === user.username && password === user.password) {
     req.session.loggedIn = true;
     req.session.username = username;
-    return res.redirect('http://upload-service:3000/upload'); // Redirect to localhost:3000
+
+    dns.lookup(uploadService + '.default.svc.cluster.local', (err, address, family) => {
+      if (err) {
+        return res.status(500).send('Failed to resolve service IP');
+      }
+
+      const URL = `http://${address}:3000/upload`
+      return res.redirect(URL); // Redirect to localhost:3000
+    });
+  } else { 
+    return res.send('Invalid username or password for port 3000. <a href="/login">Try again</a>');
   }
-  res.send('Invalid username or password for port 3000. <a href="/login">Try again</a>');
 });
 
 app.get('/logout', (req, res) => {

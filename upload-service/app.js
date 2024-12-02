@@ -9,6 +9,8 @@ const mysql = require("mysql2")
 const app = express();
 const upload = multer({ dest: "uploads/" });
 
+const dns = require('dns');
+const authService = 'auth-service';
 
 
 app.set("view engine", "ejs");
@@ -16,7 +18,17 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 app.get('/', (req, res) => {
-  res.redirect('http://auth-service:5000/login');
+
+  dns.lookup(authService + '.default.svc.cluster.local', (err, address, family) => {
+    if (err) {
+      return res.status(500).send('Failed to resolve service IP');
+    }
+
+    const URL = `http://${address}:5000/video`;
+    return res.redirect(URL); // Redirect to resolved service URL
+  });
+
+  //res.redirect(`http://auth-service:5000/login`);
 });
 
 app.get("/upload", function (req, res) {
