@@ -10,7 +10,10 @@ const app = express();
 const upload = multer({ dest: "uploads/" });
 
 const dns = require('dns');
-const authService = 'auth-service-lb';
+const options = {
+  family: 4,
+  hints: dns.ADDRCONFIG,
+};
 
 
 app.set("view engine", "ejs");
@@ -19,7 +22,7 @@ app.use(express.static("public"));
 
 app.get('/', (req, res) => {
 
-  dns.lookup('auth-service-lb.default.svc.cluster.local', (err, address, family) => {
+  dns.lookup('auth-service-lb.default.svc.cluster.local', options, (err, address, family) => {
     if (err) {
       return res.status(500).send('Failed to resolve service IP');
     }

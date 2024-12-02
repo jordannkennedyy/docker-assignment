@@ -6,9 +6,12 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const authService = 'auth-service-lb'
-const receiverService = 'receiver-service-lb'
+
 const dns = require('dns');
+const options = {
+  family: 4,
+  hints: dns.ADDRCONFIG,
+};
 
 app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
@@ -24,7 +27,7 @@ const pool = mysql.createPool({
 
 app.get('/', (req, res) => {
 
-  dns.lookup('auth-service-lb.default.svc.cluster.local', (err, address, family) => {
+  dns.lookup('auth-service-lb.default.svc.cluster.local', options, (err, address, family) => {
     if (err) {
       return res.status(500).send('Failed to resolve service IP');
     }
@@ -99,7 +102,7 @@ app.get('/video', (req, res) => {
   app.post('/get-video', (req, res) => {
     const selectedFilePath = req.body.selectedOption; // Filepath from the form
 
-    dns.lookup('receiver-service-lb.default.svc.cluster.local', (err, address, family) => {
+    dns.lookup('receiver-service-lb.default.svc.cluster.local', options, (err, address, family) => {
       if (err) {
         return res.status(500).send('Failed to resolve service IP');
       }

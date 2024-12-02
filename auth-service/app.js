@@ -6,8 +6,10 @@ const app = express();
 const PORT = 5000;
 
 const dns = require('dns');
-const videoServiceName = 'show-video-service-lb';
-const uploadService = 'upload-service-lb'
+const options = {
+  family: 4,
+  hints: dns.ADDRCONFIG,
+};
 
 // Sample user (for demonstration purposes)
 const user = {
@@ -45,12 +47,13 @@ app.post('/login/2000', (req, res) => {
     req.session.loggedIn = true;
     req.session.username = username;
 
-    dns.lookup('show-video-service-lb.default.svc.cluster.local', (err, address, family) => {
+    dns.lookup('show-video-service-lb.default.svc.cluster.local', options, (err, address, family) => {
       if (err) {
         return res.status(500).send('Failed to resolve service IP');
       }
 
       const URL = `http://${address}:2000/video`;
+      console.log(`returning: ${URL}, ${address}, ${family}`)
       return res.redirect(URL); // Redirect to resolved service URL
     });
   } else {
@@ -66,7 +69,7 @@ app.post('/login/3000', (req, res) => {
     req.session.loggedIn = true;
     req.session.username = username;
 
-    dns.lookup('upload-service-lb.default.svc.cluster.local', (err, address, family) => {
+    dns.lookup('upload-service-lb.default.svc.cluster.local', options, (err, address, family) => {
       if (err) {
         return res.status(500).send('Failed to resolve service IP');
       }
