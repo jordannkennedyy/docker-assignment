@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
+RUN npm install @kubernetes/client-node
 
 EXPOSE 3000
 

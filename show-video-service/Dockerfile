@@ -10,6 +10,7 @@ RUN npm install pug
 RUN npm install mysql2
 RUN npm install aws-sdk
 RUN npm install body-parser
+RUN npm install @kubernetes/client-node
 
 EXPOSE 2000
 
