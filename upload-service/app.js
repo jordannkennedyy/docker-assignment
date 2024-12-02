@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
       return res.status(500).send('Failed to resolve service IP');
     }
 
-    const URL = `http://${address}:5000/login`;
+    const URL = `http://${address}:80/login`;
     return res.redirect(URL); // Redirect to resolved service URL
   });
 

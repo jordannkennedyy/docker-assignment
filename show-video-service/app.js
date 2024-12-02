@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
       return res.status(500).send('Failed to resolve service IP');
     }
 
-    const URL = `http://${address}:5000/login`;
+    const URL = `http://${address}:80/login`;
     return res.redirect(URL); // Redirect to resolved service URL
   });
 
@@ -107,7 +107,7 @@ app.get('/video', (req, res) => {
         return res.status(500).send('Failed to resolve service IP');
       }
       // Construct the URL for the video file on the receiver service
-      const videoUrl = `http://${address}:4000/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
+      const videoUrl = `http://${address}:80/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
       // Redirect the client to the video URL
       res.redirect(videoUrl);
     });

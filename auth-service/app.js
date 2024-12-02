@@ -52,7 +52,7 @@ app.post('/login/2000', (req, res) => {
         return res.status(500).send('Failed to resolve service IP');
       }
 
-      const URL = `http://${address}:2000/video`;
+      const URL = `http://${address}:80/video`;
       console.log(`returning: ${URL}, ${address}, ${family}`)
       return res.redirect(URL); // Redirect to resolved service URL
     });
@@ -74,7 +74,7 @@ app.post('/login/3000', (req, res) => {
         return res.status(500).send('Failed to resolve service IP');
       }
 
-      const URL = `http://${address}:3000/upload`
+      const URL = `http://${address}:80/upload`
       return res.redirect(URL); // Redirect to localhost:3000
     });
   } else { 
