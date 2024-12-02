@@ -25,10 +25,10 @@ async function getServiceExternalIP(serviceName, namespace = 'default') {
     const service = response.body;
     if (service.status && service.status.loadBalancer && service.status.loadBalancer.ingress) {
       // Some cloud providers use 'ip', some use 'hostname'
-      const externalIP = service.status.loadBalancer.ingress[0].ip || 
-                         service.status.loadBalancer.ingress[0].hostname;
+      const externalIP = service.status.loadBalancer.ingress[0];
+      const IP = externalIP.ip
       
-      return externalIP;
+      return IP;
     }
     
     // Fallback to cluster IP if no external IP is found
