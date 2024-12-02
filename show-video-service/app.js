@@ -6,8 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const authService = 'auth-service'
-const receiverService = 'receiver-service'
+const authService = 'auth-service-lb'
+const receiverService = 'receiver-service-lb'
 const dns = require('dns');
 
 app.set('view engine', 'pug');
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
       return res.status(500).send('Failed to resolve service IP');
     }
 
-    const URL = `http://${address}:5000/video`;
+    const URL = `http://${address}:5000/login`;
     return res.redirect(URL); // Redirect to resolved service URL
   });
 

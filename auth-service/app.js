@@ -6,8 +6,8 @@ const app = express();
 const PORT = 5000;
 
 const dns = require('dns');
-const videoServiceName = 'show-video-service';
-const uploadService = 'upload-service'
+const videoServiceName = 'show-video-service-lb';
+const uploadService = 'upload-service-lb'
 
 // Sample user (for demonstration purposes)
 const user = {

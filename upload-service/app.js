@@ -10,7 +10,7 @@ const app = express();
 const upload = multer({ dest: "uploads/" });
 
 const dns = require('dns');
-const authService = 'auth-service';
+const authService = 'auth-service-lb';
 
 
 app.set("view engine", "ejs");
@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
       return res.status(500).send('Failed to resolve service IP');
     }
 
-    const URL = `http://${address}:5000/video`;
+    const URL = `http://${address}:5000/login`;
     return res.redirect(URL); // Redirect to resolved service URL
   });
 
