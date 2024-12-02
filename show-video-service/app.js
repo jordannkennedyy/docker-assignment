@@ -8,10 +8,38 @@ const path = require('path');
 const app = express();
 
 const dns = require('dns');
-const options = {
-  family: 4,
-  hints: dns.ADDRCONFIG,
-};
+const k8s = require('@kubernetes/client-node');
+
+// Kubernetes service IP retrieval function
+async function getServiceExternalIP(serviceName, namespace = 'default') {
+  // Create a Kubernetes client
+  const kc = new k8s.KubeConfig();
+  kc.loadFromDefault();
+
+  // Create a client for core V1 API
+  const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+
+  try {
+    // Fetch the specific service
+    const response = await k8sApi.readNamespacedService(serviceName, namespace);
+    
+    // Extract external IP from LoadBalancer ingress
+    const service = response.body;
+    if (service.status && service.status.loadBalancer && service.status.loadBalancer.ingress) {
+      // Some cloud providers use 'ip', some use 'hostname'
+      const externalIP = service.status.loadBalancer.ingress[0].ip || 
+                         service.status.loadBalancer.ingress[0].hostname;
+      
+      return externalIP;
+    }
+    
+    // Fallback to cluster IP if no external IP is found
+    return service.spec.clusterIP;
+  } catch (error) {
+    console.error('Error retrieving service IP:', error);
+    return null;
+  }
+}
 
 app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
@@ -25,16 +53,12 @@ const pool = mysql.createPool({
     database: 'filedb'
   });
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
 
-  dns.lookup('auth-service-lb.default.svc.cluster.local', options, (err, address, family) => {
-    if (err) {
-      return res.status(500).send('Failed to resolve service IP');
-    }
-
-    const URL = `http://${address}:80/login`;
-    return res.redirect(URL); // Redirect to resolved service URL
-  });
+  const serviceIP = await getServiceExternalIP('auth-service-lb');
+  const URL = `http://${serviceIP}:80/login`;
+  console.log(`Redirecting to: ${URL}`);
+  return res.redirect(URL); // Redirect to resolved service URL
 
   //res.redirect(`http://auth-service:5000/login`);
 });
@@ -99,18 +123,16 @@ app.get('/video', (req, res) => {
   // });
 
 
-  app.post('/get-video', (req, res) => {
+  app.post('/get-video', async (req, res) => {
     const selectedFilePath = req.body.selectedOption; // Filepath from the form
 
-    dns.lookup('receiver-service-lb.default.svc.cluster.local', options, (err, address, family) => {
-      if (err) {
-        return res.status(500).send('Failed to resolve service IP');
-      }
+    const serviceIP = await getServiceExternalIP('receiver-service-lb');
+    console.log(`Redirecting to: ${URL}`);
+
       // Construct the URL for the video file on the receiver service
-      const videoUrl = `http://${address}:80/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
+      const videoUrl = `http://${serviceIP}:80/stream-video?filepath=${encodeURIComponent(selectedFilePath)}`;
       // Redirect the client to the video URL
       res.redirect(videoUrl);
-    });
   });
 
 
