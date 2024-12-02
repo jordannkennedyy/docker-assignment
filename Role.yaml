@@ -5,5 +5,5 @@ metadata:
   name: example-role
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
+  resources: ["services"]
   verbs: ["get", "list", "watch"]
