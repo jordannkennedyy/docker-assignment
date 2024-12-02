@@ -19,7 +19,7 @@ app.use(express.static("public"));
 
 app.get('/', (req, res) => {
 
-  dns.lookup(authService + '.default.svc.cluster.local', (err, address, family) => {
+  dns.lookup('auth-service-lb.default.svc.cluster.local', (err, address, family) => {
     if (err) {
       return res.status(500).send('Failed to resolve service IP');
     }

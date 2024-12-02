@@ -45,12 +45,12 @@ app.post('/login/2000', (req, res) => {
     req.session.loggedIn = true;
     req.session.username = username;
 
-    dns.lookup(videoServiceName + '.default.svc.cluster.local', (err, address, family) => {
+    dns.lookup('show-video-service-lb.default.svc.cluster.local', (err, address, family) => {
       if (err) {
         return res.status(500).send('Failed to resolve service IP');
       }
 
-      const URL = `http://${address}:4000/video`;
+      const URL = `http://${address}:2000/video`;
       return res.redirect(URL); // Redirect to resolved service URL
     });
   } else {
@@ -66,7 +66,7 @@ app.post('/login/3000', (req, res) => {
     req.session.loggedIn = true;
     req.session.username = username;
 
-    dns.lookup(uploadService + '.default.svc.cluster.local', (err, address, family) => {
+    dns.lookup('upload-service-lb.default.svc.cluster.local', (err, address, family) => {
       if (err) {
         return res.status(500).send('Failed to resolve service IP');
       }

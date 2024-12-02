@@ -24,7 +24,7 @@ const pool = mysql.createPool({
 
 app.get('/', (req, res) => {
 
-  dns.lookup(authService + '.default.svc.cluster.local', (err, address, family) => {
+  dns.lookup('auth-service-lb.default.svc.cluster.local', (err, address, family) => {
     if (err) {
       return res.status(500).send('Failed to resolve service IP');
     }
@@ -99,7 +99,7 @@ app.get('/video', (req, res) => {
   app.post('/get-video', (req, res) => {
     const selectedFilePath = req.body.selectedOption; // Filepath from the form
 
-    dns.lookup(receiverService + '.default.svc.cluster.local', (err, address, family) => {
+    dns.lookup('receiver-service-lb.default.svc.cluster.local', (err, address, family) => {
       if (err) {
         return res.status(500).send('Failed to resolve service IP');
       }
