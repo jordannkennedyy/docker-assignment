@@ -15,6 +15,7 @@ spec:
       containers:
       - name: auth-service-container
         image: jordankennedy/acit3495:auth-service
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         resources:
@@ -53,6 +54,7 @@ spec:
       containers:
       - name: receiver-service-container
         image: jordankennedy/acit3495:receiver-service
+        imagePullPolicy: Always
         ports:
         - containerPort: 4000
         resources:
@@ -91,6 +93,7 @@ spec:
       containers:
       - name: show-video-service-container
         image: jordankennedy/acit3495:show-video-service
+        imagePullPolicy: Always
         ports:
         - containerPort: 2000
         resources:
@@ -129,6 +132,7 @@ spec:
       containers:
       - name: upload-service-container
         image: jordankennedy/acit3495:upload-service
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         resources:
