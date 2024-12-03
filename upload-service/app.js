@@ -62,11 +62,13 @@ app.get("/upload", function (req, res) {
   return res.render("upload");
 });
 
+const dbHost = 'database.default'
+
 app.post("/upload", upload.single("file"), async function (req, res) {
   console.log("File received by upload service:", req.file);
 
   const db = mysql.createConnection({
-    host: 'db',  // Docker service name for MySQL
+    host: dbHost,  // Docker service name for MySQL
     user: 'user',
     password: 'password',
     database: 'filedb',

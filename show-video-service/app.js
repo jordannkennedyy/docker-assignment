@@ -45,7 +45,7 @@ app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const dbHost = 'database-lb.default.svc.cluster.local'
+const dbHost = 'database.default'
 
 // create MySQL connection
 const pool = mysql.createPool({
