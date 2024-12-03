@@ -62,7 +62,7 @@ app.get("/upload", function (req, res) {
   return res.render("upload");
 });
 
-const dbHost = 'database.default'
+const dbHost = 'database-lb.default'
 
 app.post("/upload", upload.single("file"), async function (req, res) {
   console.log("File received by upload service:", req.file);
