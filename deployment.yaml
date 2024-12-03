@@ -168,6 +168,16 @@ spec:
       labels:
         app: database
     spec:
+      initContainers:
+      - name: init-db
+        image: mysql:8.0
+        command: ["sh", "-c", "echo 'CREATE TABLE IF NOT EXISTS files (id INT AUTO_INCREMENT PRIMARY KEY, filename VARCHAR(255) NOT NULL, filepath VARCHAR(255) NOT NULL);' | mysql -h localhost -u root -prootpassword filedb"]
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: rootpassword
+        volumeMounts:
+          - name: db-data
+            mountPath: /var/lib/mysql
       containers:
       - name: database-container
         image: mysql:8.0
