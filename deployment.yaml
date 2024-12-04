@@ -131,7 +131,7 @@ spec:
     spec:
       containers:
       - name: upload-service-container
-        image: jordankennedy/acit3495:upload-service
+        image: jordankennedy/acit3495:upload-service-new
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
