@@ -212,7 +212,6 @@ metadata:
 provisioner: pd.csi.storage.gke.io
 parameters:
   type: pd-standard
-  zone: us-west1-a
 volumeBindingMode: WaitForFirstConsumer
 ---
 apiVersion: v1
