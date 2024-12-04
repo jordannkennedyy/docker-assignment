@@ -205,6 +205,16 @@ spec:
     targetPort: 3306
     nodePort: 31000
 ---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: custom-zonal
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-standard
+  zone: us-west1-b
+volumeBindingMode: WaitForFirstConsumer
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -215,4 +225,4 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: standard-rwo
+  storageClassName: custom-zonal
